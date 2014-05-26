@@ -1,0 +1,152 @@
+<html>
+  <head>
+    <title>.:Welcome Home:.</title>
+    <script type='text/javascript'>
+      var v_indicador='normal'; //normal-enf rapido-swing-apagado-temporizador
+      var v_ventilador='minimo'; //aireacion-maximo-medio-minimo-(MAXIMO -> enf rapido)
+      var v_temperatura_actual=24; //30-18 (17-16 -> solo en modo calor)      
+      var v_modo = 'frio';//calor-frio-deshumidicar
+      var v_swing = 'apagado';
+      var v_enfriado_rapido = 'apagado';
+      var v_temporizador = 'apagado';
+      
+      function cambiar_modo(){
+	if(v_modo=='frio'){
+	  v_modo = 'deshumidicar';
+	}else if(v_modo=='deshumidicar'){
+	  v_modo = 'calor';
+	}else if(v_modo == 'calor'){
+	  v_modo = 'frio';
+	}
+      }
+      
+      function encender(){
+	if(v_indicador != 'apagado'  ){
+	  v_indicador = 'normal';
+	}else{
+	  v_indicador = 'apagado';
+	}
+	actualizar();
+      }
+      
+      function temperatura(accion){
+	if(accion=='subir'){
+	  if(v_temperatura_actual >=30){
+	    v_temperatura_actual = 30;
+	  }else{
+	    v_temperatura_actual++;
+	  }
+	}else if(accion=='bajar'){
+	  if(v_modo=='frio'){
+	    if(v_temperatura_actual <= 18){
+	      v_temperatura_actual = 18;
+	      
+	    }else{
+	      v_temperatura_actual--;
+	    }
+	  }else if(v_modo =='calor'){
+	    if(v_temperatura_actual <= 16){
+	      v_temperatura_actual = 16;
+	    }else{
+	      v_temperatura_actual--;
+	    }
+	  }
+	}
+	actualizar();
+      }
+      
+      function enfriado_rapido(){
+	if(v_enfriado_rapido=='apagado'){
+	  v_enfriado_rapido ='encendido';
+	  v_indicador = 'enf-rap';
+	}else{
+	  v_enfriado_rapido = 'apagado';
+	  v_indicador ='normal';
+	}
+	actualizar();
+      }
+      
+      function swing(){
+	if(v_swing=='apagado'){
+	  v_swing = 'encendido';	
+	}else{
+	  v_swing = 'apagado';
+	}
+	actualizar();
+      }
+      
+      function actualizar(){
+        if(v_indicador == 'apagado'){
+	  gebi('estado').innerHTML = 'Apagado';
+        }else{
+	  gebi('estado').innerHTML = 'Encendido';
+        }
+        gebi('ventilador').innerHTML = '<strong>Ventilador</strong> '+v_ventilador;
+        gebi('temperatura').innerHTML ='<strong>Temperatura</strong> '+ v_temperatura_actual;
+        gebi('modo').innerHTML ='<strong>Modo</strong> '+v_modo;
+        gebi('swing').innerHTML ='<strong>Swing</strong> '+v_swing;
+	gebi('indicador').innerHTML ='<strong>Indicador</strong> '+v_indicador;
+	gebi('temporizador').innerHTML ='<strong>Temporizador</strong> '+v_temporizador;
+      }
+      
+      function temporizador(){
+	if(v_temporizador=='apagado'){
+	  v_temporizador = 1;
+	}else if(v_temporizador < 7){
+	  v_temporizador++;
+	}else{
+	  v_temporizador = 'apagado';
+	}
+	
+	actualizar();
+      }
+      
+      function ventilador(){
+	
+	if(v_ventilador=='minimo'){
+	  v_ventilador = 'medio';
+	  
+	}else if(v_ventilador == 'medio'){
+	  v_ventilador = 'maximo';
+	}else if(v_ventilador == 'maximo'){
+	  v_ventilador = 'aireacion';
+	}else if(v_ventilador == 'aireacion'){
+	  v_ventilador = 'minimo';
+	}
+	actualizar();
+      }
+      
+      function gebi(id){
+	return document.getElementById(id);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Control </h1>
+    <div id='estado'>Apagado</div>
+    <div id='indicador'>Indicador</div>
+    <div id='ventilador'>Ventilador</div>
+    <div id='temperatura'>Temperatura </div>
+    <div id='modo'>Modo</div>
+    <div id='swing'>Swing</div>
+    <div id='temporizador'>Temporizador</div>
+        
+    <table>
+      <tr>
+	<td><input id='btn_modo' type='button' onclick='cambiar_modo();' value='modo'/></td>
+	<td></td>
+	<td><input id='btn_temporizador' type='button' onclick='temporizador();' value='Temporizador'/></td>
+      </tr>
+      <tr>
+	<td><input id='btn_enf_rap' type='button' onclick='enfriado_rapido();' value='Enf Rap.'/></td>
+	<td><input id='btn_subir_temp' type='button' onclick='temperatura("subir");' value='^'/></td>
+	<td><input id='btn_swing' type='button' onclick='swing();' value='Swing'/></td>
+      </tr>
+      <tr>
+	<td><input id='btn_ventilador' type='button' onclick='ventilador();' value='Ventilador'/></td>
+	<td><input id='btn_bajar_temp' type='button' onclick='temperatura("bajar");' value='V'/></td>
+	<td><input id='btn_onoff' type='button' onclick='encender();' value='encender'/></td>
+      </tr>
+    </table>
+  </body>
+</html>
