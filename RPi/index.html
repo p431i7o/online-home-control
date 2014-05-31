@@ -124,7 +124,35 @@
 	return document.getElementById(id);
       }
       
-      
+function normal(){
+	var header = cabecera();
+	var indicador= padString('0','0',4,'left'); 	
+}
+
+function cabecera(){
+	return '88';
+}
+
+function str2bin(str){
+	var retorno="";
+	for(var i=0;i<str.length;i++){
+		retorno += parseInt(str[i]).toString(2);
+	}
+	return padString(retorno,'0',4,'left');
+}
+
+function padString(originalString,padChars,desiredLength,direction){
+	var pendingLength = desiredLength - originalString.length ;
+	if(pendingLength <=0){
+		return originalString;
+	}else{
+		if(direction=='left'){
+			return padString(padChars+originalString,padChars,desiredLength,direction);
+		}else{
+			return padString(originalString+padChars,padChars,desiredLength,direction);
+		}
+	}
+}
     </script>
   </head>
   <body>
