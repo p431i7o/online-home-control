@@ -55,6 +55,7 @@
 	  }
 	}
 	actualizar();
+	normal();
       }
       
       function enfriado_rapido(){
@@ -125,8 +126,32 @@
       }
       
 function normal(){
-	var header = cabecera();
-	var indicador= padString('0','0',4,'left'); 	
+	var header = str2bin(cabecera());
+	var indicador= padString('0','0',4,'left');
+	var modo=padString('0','0',4,'left');
+	if(v_modo=='frio'){
+	   modo = '1000';
+	}else if(v_modo=='calor'){
+	   modo = '1100';
+	}else if(v_modo=="deshumidicar"){
+	   modo = '1001';
+	}
+        var temperatura=padString((v_temperatura_actual-15).toString(2),'0',4,'left');
+	var ventilador;
+	if(v_ventilador=='maximo'){
+	   ventilador = '0100';
+	}else if(v_ventilador=='medio'){
+	   ventilador = '0010';
+	}else if(v_ventilador=='minimo'){
+	   ventilador = '0000';
+	}else if(v_ventilador=='aireacion'){
+	   ventilador ='0101';
+	}
+	var bitsum = padString(((parseInt(indicador,2)+parseInt(modo,2)+parseInt(temperatura,2)+parseInt(ventilador,2))%16).toString(2),'0',4,'left');
+	console.log('normal:');
+	console.log(header+indicador+modo+temperatura+ventilador);
+
+         	
 }
 
 function cabecera(){
