@@ -22,6 +22,7 @@
       }
       
       function encender(){
+	console.log('encender',v_indicador);
 	if(v_indicador != 'apagado'  ){
 	  v_indicador = 'normal';
 	}else{
@@ -149,9 +150,8 @@ function normal(){
 	}
 	var bitsum = padString(((parseInt(indicador,2)+parseInt(modo,2)+parseInt(temperatura,2)+parseInt(ventilador,2))%16).toString(2),'0',4,'left');
 	console.log('normal:');
-	console.log(header+indicador+modo+temperatura+ventilador);
-
-         	
+	var mensaje=header+indicador+modo+temperatura+ventilador;
+	console.log(mensaje,parseInt(mensaje,2).toString(16));        	
 }
 
 function cabecera(){
