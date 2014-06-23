@@ -2,168 +2,166 @@
   <head>
     <title>.:Welcome Home:.</title>
     <script type='text/javascript'>
-      var v_indicador='apagado'; //normal-enf rapido-swing-apagado-temporizador
-      var v_ventilador='minimo'; //aireacion-maximo-medio-minimo-(MAXIMO -> enf rapido)
-      var v_temperatura_actual=24; //30-18 (17-16 -> solo en modo calor)      
-      var v_modo = 'frio';//calor-frio-deshumidicar
-      var v_swing = 'apagado';
-      var v_enfriado_rapido = 'apagado';
-      var v_temporizador = 'apagado';
+var v_indicador='apagado'; //normal-enf rapido-swing-apagado-temporizador
+var v_ventilador='minimo'; //aireacion-maximo-medio-minimo-(MAXIMO -> enf rapido)
+var v_temperatura_actual=24; //30-18 (17-16 -> solo en modo calor)      
+var v_modo = 'frio';//calor-frio-deshumidicar
+var v_swing = 'apagado';
+var v_enfriado_rapido = 'apagado';
+var v_temporizador = 'apagado';
       
-      function cambiar_modo(){
-	if(v_modo=='frio'){
-	  v_modo = 'deshumidicar';
+function cambiar_modo(){
+    if(v_modo=='frio'){
+        v_modo = 'deshumidicar';
 	}else if(v_modo=='deshumidicar'){
-	  v_modo = 'calor';
+        v_modo = 'calor';
 	}else if(v_modo == 'calor'){
-	  v_modo = 'frio';
+        v_modo = 'frio';
 	}
 	actualizar();
-      }
-      
-      function encender(){
-	console.log('encender',v_indicador);
-	if(v_indicador != 'apagado'  ){
-	  v_indicador = 'normal';
-	}else{
-	  v_indicador = 'apagado';
-	  
-	}
-	actualizar();
-      }
-      
-      function temperatura(accion){
-	if(accion=='subir'){
-	  if(v_temperatura_actual >=30){
-	    v_temperatura_actual = 30;
-	  }else{
-	    v_temperatura_actual++;
-	  }
-	}else if(accion=='bajar'){
-	  if(v_modo=='frio'){
-	    if(v_temperatura_actual <= 18){
-	      v_temperatura_actual = 18;
-	      
-	    }else{
-	      v_temperatura_actual--;
-	    }
-	  }else if(v_modo =='calor'){
-	    if(v_temperatura_actual <= 16){
-	      v_temperatura_actual = 16;
-	    }else{
-	      v_temperatura_actual--;
-	    }
-	  }
-	}
-	actualizar();
-	normal();
-      }
-      
-      function enfriado_rapido(){
-	if(v_enfriado_rapido=='apagado'){
-	  v_enfriado_rapido ='encendido';
-	  v_indicador = 'enf-rap';
-	}else{
-	  v_enfriado_rapido = 'apagado';
-	  v_indicador ='normal';
-	}
-	actualizar();
-      }
-      
-      function swing(){
-	if(v_swing=='apagado'){
-	  v_swing = 'encendido';	
-	}else{
-	  v_swing = 'apagado';
-	}
-	actualizar();
-      }
-      
-      function actualizar(){
-	
-        if(v_indicador == 'apagado'){
-	  gebi('estado').innerHTML = 'Apagado';
-	  
+}
+
+function encender(){
+    console.log('@@encender estado actual',v_indicador);
+    if(v_indicador == 'apagado'  ){
+        v_indicador = 'normal';
+    }else{
+        v_indicador = 'apagado';
+    }
+    console.log('@@encender estado actual',v_indicador);
+    actualizar();
+    normal();
+
+}
+
+function temperatura(accion){
+    if(accion=='subir'){
+        if(v_temperatura_actual >=30){
+            v_temperatura_actual = 30;
         }else{
-	  gebi('estado').innerHTML = 'Encendido';
+            v_temperatura_actual++;
         }
-        gebi('ventilador').innerHTML = '<strong>Ventilador</strong> '+v_ventilador;
-        gebi('temperatura').innerHTML ='<strong>Temperatura</strong> '+ v_temperatura_actual;
-        gebi('modo').innerHTML ='<strong>Modo</strong> '+v_modo;
-        gebi('swing').innerHTML ='<strong>Swing</strong> '+v_swing;
-	gebi('indicador').innerHTML ='<strong>Indicador</strong> '+v_indicador;
-	gebi('temporizador').innerHTML ='<strong>Temporizador</strong> '+v_temporizador;
-      }
-      
-      function temporizador(){
-	if(v_temporizador=='apagado'){
-	  v_temporizador = 1;
-	}else if(v_temporizador < 7){
-	  v_temporizador++;
-	}else{
-	  v_temporizador = 'apagado';
-	}
-	
-	actualizar();
-      }
-      
-      function ventilador(){
-	
-	if(v_ventilador=='minimo'){
-	  v_ventilador = 'medio';
-	  
-	}else if(v_ventilador == 'medio'){
-	  v_ventilador = 'maximo';
-	}else if(v_ventilador == 'maximo'){
-	  v_ventilador = 'aireacion';
-	}else if(v_ventilador == 'aireacion'){
-	  v_ventilador = 'minimo';
-	}
-	actualizar();
-      }
-      
-      function gebi(id){
-	return document.getElementById(id);
-      }
-      
+    }else if(accion=='bajar'){
+        if(v_modo=='frio'){
+            if(v_temperatura_actual <= 18){
+                v_temperatura_actual = 18;
+            }else{
+                v_temperatura_actual--;
+            }
+        }else if(v_modo =='calor'){
+            if(v_temperatura_actual <= 16){
+                v_temperatura_actual = 16;
+            }else{
+                v_temperatura_actual--;
+            }
+        }
+    }
+    actualizar();
+    normal();
+}
+
+function enfriado_rapido(){
+    if(v_enfriado_rapido=='apagado'){
+        v_enfriado_rapido ='encendido';
+        v_indicador = 'enf-rap';
+    }else{
+        v_enfriado_rapido = 'apagado';
+        v_indicador ='normal';
+    }
+    actualizar();
+}
+
+function swing(){
+    if(v_swing=='apagado'){
+        v_swing = 'encendido';	
+    }else{
+        v_swing = 'apagado';
+    }
+    actualizar();
+}
+
+function actualizar(){
+    if(v_indicador == 'apagado'){
+        gebi('estado').innerHTML = 'Apagado';
+    }else{
+        gebi('estado').innerHTML = 'Encendido';
+    }
+    gebi('ventilador').innerHTML = '<strong>Ventilador</strong> '+v_ventilador;
+    gebi('temperatura').innerHTML ='<strong>Temperatura</strong> '+ v_temperatura_actual;
+    gebi('modo').innerHTML ='<strong>Modo</strong> '+v_modo;
+    gebi('swing').innerHTML ='<strong>Swing</strong> '+v_swing;
+    gebi('indicador').innerHTML ='<strong>Indicador</strong> '+v_indicador;
+    gebi('temporizador').innerHTML ='<strong>Temporizador</strong> '+v_temporizador;
+}
+
+function temporizador(){
+    if(v_temporizador=='apagado'){
+        v_temporizador = 1;
+    }else if(v_temporizador < 7){
+        v_temporizador++;
+    }else{
+        v_temporizador = 'apagado';
+    }
+    actualizar();
+}
+
+function ventilador(){
+
+if(v_ventilador=='minimo'){
+v_ventilador = 'medio';
+
+}else if(v_ventilador == 'medio'){
+v_ventilador = 'maximo';
+}else if(v_ventilador == 'maximo'){
+v_ventilador = 'aireacion';
+}else if(v_ventilador == 'aireacion'){
+v_ventilador = 'minimo';
+}
+actualizar();
+}
+
+function gebi(id){
+    return document.getElementById(id);
+}
+
 function normal(){
-	var header = str2bin(cabecera());
-	var indicador= padString('0','0',4,'left');
-	var modo=padString('0','0',4,'left');
-	if(v_modo=='frio'){
-	   modo = '1000';
-	}else if(v_modo=='calor'){
-	   modo = '1100';
-	}else if(v_modo=="deshumidicar"){
-	   modo = '1001';
-	}
-        var temperatura=padString((v_temperatura_actual-15).toString(2),'0',4,'left');
-	var ventilador;
-	if(v_ventilador=='maximo'){
-	   ventilador = '0100';
-	}else if(v_ventilador=='medio'){
-	   ventilador = '0010';
-	}else if(v_ventilador=='minimo'){
-	   ventilador = '0000';
-	}else if(v_ventilador=='aireacion'){
-	   ventilador ='0101';
-	}
-	var bitsum = padString(((parseInt(indicador,2)+parseInt(modo,2)+parseInt(temperatura,2)+parseInt(ventilador,2))%16).toString(2),'0',4,'left');
-	console.log('normal:');
-	var mensaje=header+indicador+modo+temperatura+ventilador;
-	console.log(mensaje,parseInt(mensaje,2).toString(16));        	
+    var header = str2bin(cabecera());
+    var indicador= padString('0','0',4,'left');
+    var modo=padString('0','0',4,'left');
+    if(v_modo=='frio'){
+        modo = '1000';
+    }else if(v_modo=='calor'){
+        modo = '1100';
+    }else if(v_modo=="deshumidicar"){
+        modo = '1001';
+    }
+    var temperatura=padString((v_temperatura_actual-15).toString(2),'0',4,'left');
+    var ventilador;
+    if(v_ventilador=='maximo'){
+        ventilador = '0100';
+    }else if(v_ventilador=='medio'){
+        ventilador = '0010';
+    }else if(v_ventilador=='minimo'){
+        ventilador = '0000';
+    }else if(v_ventilador=='aireacion'){
+        ventilador ='0101';
+    }
+    var bitsum = padString(((parseInt(indicador,2)+parseInt(modo,2)+parseInt(temperatura,2)+parseInt(ventilador,2))%16).toString(2),'0',4,'left');
+    console.log('normal:');
+    var mensaje=header+indicador+modo+temperatura+ventilador;
+    console.log(mensaje,parseInt(mensaje,2).toString(16));        	
 }
 
 function cabecera(){
-	return '88';
+    return '88';
 }
 
 function str2bin(str){
-	var retorno="";
-	for(var i=0;i<str.length;i++){
-		retorno += parseInt(str[i]).toString(2);
-	}
-	return padString(retorno,'0',4,'left');
+    var retorno="";
+    for(var i=0;i<str.length;i++){
+        retorno += parseInt(str[i]).toString(2);
+    }
+    return padString(retorno,'0',4,'left');
 }
 
 function padString(originalString,padChars,desiredLength,direction){
@@ -178,7 +176,7 @@ function padString(originalString,padChars,desiredLength,direction){
 		}
 	}
 }
-    </script>
+</script>
   </head>
   <body>
     <h1>Control </h1>
