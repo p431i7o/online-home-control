@@ -103,7 +103,26 @@ function temporizador(){
         v_temporizador = 'apagado';
     }
     actualizar();
+    var header = str2bin(cabecera());
+    var indicador = '1010';
+    if(v_temporizador=='apagado'){
+        var tiempo = padString(0,'0',12,'left');
+    }else{
+        var tiempo = padString((60*v_temporizador).toString(2),'0',12,'left');
+    }
+    
+    console.log('tiempo',tiempo);
+    var cuarteto1 = tiempo.substr(0,4);
+    var cuarteto2 = tiempo.substr(4,4);
+    var cuarteto3 = tiempo.substr(8,4);
+    
+    var bitsum = padString(((parseInt(indicador,2)+parseInt(cuarteto1,2)+parseInt(cuarteto2,2)+parseInt(cuarteto3,2))%16).toString(2),'0',4,'left');
+    var mensaje = header+indicador+cuarteto1+cuarteto2+cuarteto3+bitsum;
+    console.log('temporizador***');
+    console.log(mensaje,parseInt(mensaje,2).toString(16),v_temporizador);
 }
+
+
 
 function ventilador(){
 
@@ -148,7 +167,7 @@ function normal(){
     }
     var bitsum = padString(((parseInt(indicador,2)+parseInt(modo,2)+parseInt(temperatura,2)+parseInt(ventilador,2))%16).toString(2),'0',4,'left');
     console.log('normal:');
-    var mensaje=header+indicador+modo+temperatura+ventilador;
+    var mensaje=header+indicador+modo+temperatura+ventilador+bitsum;
     console.log(mensaje,parseInt(mensaje,2).toString(16));        	
 }
 
