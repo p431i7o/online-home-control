@@ -23,6 +23,11 @@ function cambiar_modo(){
 
 function encender(){
     console.log('@@encender estado actual',v_indicador);
+     var header = str2bin(cabecera());
+
+    var cuarteto1 = '0000';
+    var cuarteto2 = '0000';    
+
     if(v_indicador == 'apagado'  ){
         v_indicador = 'normal';
     }else{
@@ -30,7 +35,18 @@ function encender(){
     }
     console.log('@@encender estado actual',v_indicador);
     actualizar();
-    normal();
+    
+    if(v_indicador=='apagado'){
+        var indicador = '1100';
+        cuarteto3 = '0101';
+        var bitsum = padString(((parseInt(indicador,2)+parseInt(cuarteto1,2)+parseInt(cuarteto2,2)+parseInt(cuarteto3,2))%16).toString(2),'0',4,'left');
+        var mensaje = header+indicador+cuarteto1+cuarteto2+cuarteto3+bitsum;
+        
+        console.log('@@apagar@@',mensaje,parseInt(mensaje,2).toString(16));
+    }else{
+        var indicador = '0000';
+        normal();  
+    }
 
 }
 
@@ -69,6 +85,16 @@ function enfriado_rapido(){
         v_indicador ='normal';
     }
     actualizar();
+    var header = str2bin(cabecera());
+    var indicador = '0001';
+    var cuarteto1 = '0000';
+    var cuarteto2 = '0000';
+    var cuarteto3 = '1000'; //velocidad maxima
+    var bitsum = padString(((parseInt(indicador,2)+parseInt(cuarteto1,2)+parseInt(cuarteto2,2)+parseInt(cuarteto3,2))%16).toString(2),'0',4,'left');
+    var mensaje = header+indicador+cuarteto1+cuarteto2+cuarteto3+bitsum;
+    
+    console.log('@@enfriado rapido@@');
+    console.log(mensaje,parseInt(mensaje,2),parseInt(mensaje,2).toString(16));
 }
 
 function swing(){
@@ -78,6 +104,15 @@ function swing(){
         v_swing = 'apagado';
     }
     actualizar();
+    var header = str2bin(cabecera());
+    var indicador = '0001';
+    var cuarteto1 = '0000';
+    var cuarteto2 = '0000';
+    var cuarteto3 = '0000';
+    var bitsum = padString(((parseInt(indicador,2)+parseInt(cuarteto1,2)+parseInt(cuarteto2,2)+parseInt(cuarteto3,2))%16).toString(2),'0',4,'left');
+    var mensaje = header+indicador+cuarteto1+cuarteto2+cuarteto3+bitsum;
+    console.log('@@swing@@');
+    console.log(mensaje,parseInt(mensaje,2).toString(16));
 }
 
 function actualizar(){
@@ -118,7 +153,7 @@ function temporizador(){
     
     var bitsum = padString(((parseInt(indicador,2)+parseInt(cuarteto1,2)+parseInt(cuarteto2,2)+parseInt(cuarteto3,2))%16).toString(2),'0',4,'left');
     var mensaje = header+indicador+cuarteto1+cuarteto2+cuarteto3+bitsum;
-    console.log('temporizador***');
+    console.log('@@temporizador@@');
     console.log(mensaje,parseInt(mensaje,2).toString(16),v_temporizador);
 }
 
