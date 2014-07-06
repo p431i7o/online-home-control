@@ -13,12 +13,31 @@ var v_temporizador = 'apagado';
 function cambiar_modo(){
     if(v_modo=='frio'){
         v_modo = 'deshumidicar';
-	}else if(v_modo=='deshumidicar'){
+      }else if(v_modo=='deshumidicar'){
         v_modo = 'calor';
-	}else if(v_modo == 'calor'){
+      }else if(v_modo == 'calor'){
         v_modo = 'frio';
-	}
+      }
 	actualizar();
+	normal();
+//	var header=str2bifn(cabecera());
+	/*=if(OR(J68=="ENF RAP";J68=="temporizador";J68=="apagado";J68=="swing");
+	  then "--";
+	  else if(E68=="1000";"frio";
+	  else IF(E68=="1100";"calor";
+	  else IF(E68=="0100";"encendido calor";
+	  else if(E68=="0000";"encendido frio";
+	  else IF(E68=="1001";"DESHUMIDIFICAR";
+	  else "indef"))))))*/
+//	var indicador = '0000';
+//	var cuarteto1 = '0000';
+//	var cuarteto2 = '0000';
+//	var cuarteto3 = '1000'; //velocidad maxima
+//	var bitsum = padString(((parseInt(indicador,2)+parseInt(cuarteto1,2)+parseInt(cuarteto2,2)+parseInt(cuarteto3,2))%16).toString(2),'0',4,'left');
+//	var mensaje = header+indicador+cuarteto1+cuarteto2+cuarteto3+bitsum;
+    
+//    console.log('@@cambiar modo@@');
+//    console.log(mensaje,parseInt(mensaje,2),parseInt(mensaje,2).toString(16));
 }
 
 function encender(){
@@ -172,6 +191,7 @@ v_ventilador = 'aireacion';
 v_ventilador = 'minimo';
 }
 actualizar();
+normal();
 }
 
 function gebi(id){
@@ -233,7 +253,7 @@ function padString(originalString,padChars,desiredLength,direction){
 </script>
   </head>
   <body>
-    <h1>Control </h1>
+    <h1>Control RPI </h1>
     <div id='estado'>Apagado</div>
     <div id='indicador'>Indicador</div>
     <div id='ventilador'>Ventilador</div>
