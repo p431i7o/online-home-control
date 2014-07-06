@@ -1,1 +1,3 @@
-sudo node example.js 
+#!/bin/bash
+# sudo node example.js 
+sudo node nodeApp.js
