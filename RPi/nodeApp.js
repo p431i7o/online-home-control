@@ -19,6 +19,9 @@ http.createServer(function(req, response){
     	var post = qs.parse(body);
     	console.log('POST recibido');
     	console.log(post);
+	response.writeHead(200,{'Content-Type':'text/html'});
+	response.write("{status:'ok',message:'satisfactoriamente recibido'}");
+	response.end();
     });
   }else{
     
