@@ -3,21 +3,23 @@ var express = require('express');
 var fs=require('fs');
 var path = require('path');
 var filePath = path.join(__dirname+'/index.html');
+var qs = require('querystring');
 
 http.createServer(function(req, response){
   if(req.method=='POST'){
     var body = '';
-    request.on('data', function (data) {
+    req.on('data', function (data) {
 	body += data;
 
 	// Too much POST data, kill the connection!
 	if (body.length > 1e6)
 	    req.connection.destroy();
     });
-    request.on('end', function () {
-    var post = qs.parse(body);
-    console.log('POST recibido');
-    console.log(post);
+    req.on('end', function () {
+    	var post = qs.parse(body);
+    	console.log('POST recibido');
+    	console.log(post);
+    });
   }else{
     
     fs.readFile(filePath,{encoding:'utf-8'},function(err,data){
