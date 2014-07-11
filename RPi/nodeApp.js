@@ -5,6 +5,22 @@ var path = require('path');
 var filePath = path.join(__dirname+'/index.html');
 var qs = require('querystring');
 
+function imprimirPaginaIndex(response){
+  fs.readFile(filePath,{encoding:'utf-8'},function(err,data){
+	if(!err){
+      //    console.log('datos recibidos' + data);
+	  console.log('llamada recibida');
+      //    console.log(req);
+	  response.writeHead(200,{'Content-Type':'text/html'});
+	  response.write(data);
+	  response.end();
+	}else{
+	  console.log('err');
+	  console.log(err);
+	}
+      });
+}
+
 http.createServer(function(req, response){
   if(req.method=='POST'){
     var body = '';
@@ -25,35 +41,11 @@ http.createServer(function(req, response){
 	response.writeHead(200,{'Content-Type':'text/html'});
 	//response.write("{status:'ok',message:'satisfactoriamente recibido'}");
 	//response.end();
-	fs.readFile(filePath,{encoding:'utf-8'},function(err,data){
-	if(!err){
-      //    console.log('datos recibidos' + data);
-	  console.log('llamada recibida');
-      //    console.log(req);
-	  response.writeHead(200,{'Content-Type':'text/html'});
-	  response.write(data);
-	  response.end();
-	}else{
-	  console.log('err');
-	  console.log(err);
-	}
-      });
+	imprimirPaginaIndex(response);
     });
   }else{
-    
-    fs.readFile(filePath,{encoding:'utf-8'},function(err,data){
-      if(!err){
-    //    console.log('datos recibidos' + data);
-	console.log('llamada recibida');
-    //    console.log(req);
-	response.writeHead(200,{'Content-Type':'text/html'});
-	response.write(data);
-	response.end();
-      }else{
-	console.log('err');
-	console.log(err);
-      }
-    });
-  }//else post
+    imprimirPaginaIndex(response);
+  }
+  //else post
 }).listen(1337,'192.168.1.240');
 console.log('Server running at http://192.168.1.240:1337');
