@@ -23,6 +23,7 @@ int inPin = 6;   // button connected to digital pin 6
 int indiceActual =0;
 int maxLongitud =0;
 char textLargo[] = "Un texto muy largo, muy muy largo... que nunca termina porque es largo";
+
 void setup(void){
   // Conor Switch
   pinMode(inPin, INPUT);
