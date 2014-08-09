@@ -12,6 +12,7 @@
 #include <cstdlib>
 
 #include "../RF24.h"
+#define RF_SETUP 0X17
 
 using namespace std;
 // Radio pipe addresses for the 2 nodes to communicate.
@@ -56,23 +57,37 @@ bool enviarMensaje(char* mensaje){
     for(;mensaje[i]!='\0';){
        i++;       
     }
-    bool ok = radio.write(&mensaje,/*size:*/i);
+    bool ok = radio.write(/*&*/ mensaje,/*size:*/i);
     if(ok){
-        printf("Ok . . . ");        
+        printf("Ok . . . \n\r");        
     }else{
         printf("Fallo envio.\n\r");        
     }
     //En espera del ACK
     radio.startListening();
+    _msleep(20);
     //Se toma el tiempo de espera
     unsigned long se_empieza = __millis();
     bool timeout = false;
-    while(! radio.available() && ! timeout ){
-        __msleep(10);
-    if (__millis() - se_empieza > 5000 )
-      timeout = true;
+    while( radio.available() && ! timeout ){
+	uint8_t len = radio.getDynamicPayloadSize();
+	radio.read(receivePayload,len);
+	unsigned long got_time;
+	receivePayload[len]=0;
+	printf("inBuffer: %s\n\r",receivePayload);
+	//Comparacion de lo enviado con lo recivido
+	if( !strcmp(mensaje,receivePayload) ){
+	    radio.read(&got_time, sizeof(unsigned long) );
+	    printf("Se recibio respuesta %lu, retraso envio: %lu\n\r");
+	    return true;
+	}
+    	    
+         __msleep(10);
+    	if (__millis() - se_empieza > 5000 )
+      	timeout = true;
+
     }
-    if( timeout ){
+    /*if( timeout ){
         //Si se espero mucho, la transmision fallo
         printf("Error, El tiempo ya paso.\n\r");
         radio.printDetails();
@@ -84,6 +99,8 @@ bool enviarMensaje(char* mensaje){
         printf("Se recibio respuesta %lu, retraso envio: %lu\n\r",got_time,__millis()-got_time);
         return true;        
     }
+    */
+
     
 }
 int main (int argc, char ** argv){
