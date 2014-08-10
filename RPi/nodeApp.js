@@ -1,51 +1,60 @@
-var http = require('http');
 var express = require('express');
 var fs=require('fs');
 var path = require('path');
-var filePath = path.join(__dirname+'/index.html');
-var qs = require('querystring');
+var dirname = path.join(__dirname);
+var exec = require('child_process').exec;
+var app = express();
+//var bodyParser = require('body-parser');
+var bodyParser  = require('body-parser');
+//app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+// simple logger
+/*app.use(function(req, res, next){
+  console.log('%s %s', req.method, req.url);
+  console.log(req);
+  next();
+});*/
+/*var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use( bodyParser.urlencoded() ); // to support URL-encoded bodies
+*/
+//app.use(express.json());       // to support JSON-encoded bodies
+//app.use(express.urlencoded()); // to support URL-encoded bodies
+// respond
 
-function imprimirPaginaIndex(response){
-  fs.readFile(filePath,{encoding:'utf-8'},function(err,data){
+app.use(function(req, res, next){
+  console.log('%s %s', req.method, req.url);
+  //res.send('Hello World');
+  fs.readFile(dirname+req.url,{encoding:'utf-8'},function(err,data){
 	if(!err){
-      //    console.log('datos recibidos' + data);
-	  console.log('llamada recibida');
-      //    console.log(req);
-	  response.writeHead(200,{'Content-Type':'text/html'});
-	  response.write(data);
-	  response.end();
+		res.send(data);
 	}else{
-	  console.log('err');
-	  console.log(err);
+		if(req.url=='/'){
+			res.status(200).sendfile(dirname+'/index.html');
+		}else if(req.url=='/procesarComando'){
+			res.set('Content-Type', 'application/json');
+			console.log('@@Procesar Comando');
+			//console.log(req.body);
+			var mensajeBin = req.body.mensajeBin;
+			var mensajeHex = req.body.mensajeHex;
+			exec('dir '+mensajeHex,function(error,stdout,stderr){
+				console.log('stdout: ' + stdout);
+				console.log('stderr: ' + stderr);
+				if (error !== null) {
+				  console.log('exec error: ' + error);
+				}
+			});
+			res.send("{status:'comando procesado',mensajeBin:"+mensajeBin+",mensajeHex:"+mensajeHex+"}");
+		}else{
+			console.log('#Error Archivo: "'+req.url+'" no existe');
+			res.status(404).sendfile(dirname+'/404.html');
+		}
 	}
-      });
-}
+  });
+  
+});
 
-http.createServer(function(req, response){
-  if(req.method=='POST'){
-    var body = '';
-    req.on('data', function (data) {
-	body += data;
 
-	// Too much POST data, kill the connection!
-	if (body.length > 1e6)
-	    req.connection.destroy();
-    });
-    req.on('end', function () {
-    	var post = qs.parse(body);
-    	console.log('POST recibido');
-	console.log('messagebin');
-	console.log(post.messagebin);
-    	console.log('messagehex');
-	console.log(post.messagehex);
-	response.writeHead(200,{'Content-Type':'text/html'});
-	//response.write("{status:'ok',message:'satisfactoriamente recibido'}");
-	//response.end();
-	imprimirPaginaIndex(response);
-    });
-  }else{
-    imprimirPaginaIndex(response);
-  }
-  //else post
-}).listen(1337,'192.168.1.240');
-console.log('Server running at http://192.168.1.240:1337');
+app.listen(1337);
