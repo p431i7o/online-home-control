@@ -1,12 +1,12 @@
 #include <stdio.h>
-//#include <iostream>
+#include <iostream>
 #include <stdlib.h>
-//#include <unistd.h>
-//#include <getopt.h>
-//#include <string.h>
-//#include <string>
-//#include <cstdlib>
-/*
+#include <unistd.h>
+#include <getopt.h>
+#include <string.h>
+#include <string>
+#include <cstdlib>
+
 bool enviarMensaje(char* mensaje){
 	printf("\nMensaje:\n");
 	
@@ -19,16 +19,9 @@ bool enviarMensaje(char* mensaje){
 	printf("\nSizeof %i\n",actualSize);
 	return true;
 }
-*/ 
-int main(/* int argc,char ** argv*/){
-char cadena[] = "0x8808A46";
-char * pEnd;
-   unsigned long numero;
-   numero = strtol(cadena,&pEnd,16);
-   
-   printf("numero %s=%ld",cadena,numero);
-   return 0;
-   /*	char opcion;
+
+int main(int argc,char ** argv){
+	char opcion;
 	int contador=0;
 //	extern char *optarg;
 	while((opcion = getopt(argc,argv,"f:"))!=-1){
@@ -44,5 +37,5 @@ char * pEnd;
 		}
 		if(contador<5){ return 0; } else { return 2;}
 	}
-*/
+
 }
