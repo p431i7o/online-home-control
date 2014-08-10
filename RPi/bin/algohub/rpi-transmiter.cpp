@@ -49,19 +49,19 @@ void setup(void){
     radio.startListening();
     printf("\nSetup - A continuacion, detalles:\n");
     radio.printDetails();
-    sleep(2);
+    //sleep(2);
     
 }
 
 bool enviarMensaje(char* mensaje){
     radio.stopListening();
     printf("Mensaje recibido: %s\n",mensaje);
-    int i=0;
+    /* int i=0;
     for(;mensaje[i]!='\0';){
        i++;       
-    }
-   printf("Tamanyo enviado %i vs %i\n\r",i,sizeof("hola"));
-   bool ok = radio.write(&mensaje,/*size:*/i+1);
+    }*/
+   printf("Tamanyo enviado %i\n\r",strlen(mensaje));
+   bool ok = radio.write(mensaje,strlen(mensaje));
     if(ok){
         printf("Ok . . . \n\r");        
     }else{
