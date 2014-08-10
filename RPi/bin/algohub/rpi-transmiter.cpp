@@ -12,8 +12,8 @@
 #include <cstdlib>
 
 #include "../RF24.h"
-#define RF_SETUP 0X17
-
+//define RF_SETUP 0X17
+//define IF_SERIAL_DEBUG 
 using namespace std;
 // Radio pipe addresses for the 2 nodes to communicate.
 // First pipe is for writing, 2nd, 3rd, 4th, 5th & 6th is for reading...
@@ -28,6 +28,7 @@ using namespace std;
 const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, //para escribir
                             0x7365727631LL // Para leer
 };
+char receivePayload[32];
 // CE and CSN pins On header using GPIO numbering (not pin numbers)
 RF24 radio("/dev/spidev0.0",8000000,25);  // Setup for GPIO 25 CSN
 
@@ -45,19 +46,22 @@ void setup(void){
 
     radio.openWritingPipe(pipes[0]);
     radio.openReadingPipe(1,pipes[1]);
-    
+    radio.startListening();
     printf("\nSetup - A continuacion, detalles:\n");
     radio.printDetails();
+    sleep(2);
     
 }
-bool enviarMensaje(char* mensaje){    
+
+bool enviarMensaje(char* mensaje){
     radio.stopListening();
     printf("Mensaje recibido: %s\n",mensaje);
     int i=0;
     for(;mensaje[i]!='\0';){
        i++;       
     }
-    bool ok = radio.write(/*&*/ mensaje,/*size:*/i);
+   printf("Tamanyo enviado %i vs %i\n\r",i,sizeof("hola"));
+   bool ok = radio.write(&mensaje,/*size:*/i+1);
     if(ok){
         printf("Ok . . . \n\r");        
     }else{
@@ -65,7 +69,7 @@ bool enviarMensaje(char* mensaje){
     }
     //En espera del ACK
     radio.startListening();
-    _msleep(20);
+    usleep(20);
     //Se toma el tiempo de espera
     unsigned long se_empieza = __millis();
     bool timeout = false;
@@ -78,21 +82,23 @@ bool enviarMensaje(char* mensaje){
 	//Comparacion de lo enviado con lo recivido
 	if( !strcmp(mensaje,receivePayload) ){
 	    radio.read(&got_time, sizeof(unsigned long) );
-	    printf("Se recibio respuesta %lu, retraso envio: %lu\n\r");
+	    printf("Se recibio respuesta %lu, retraso envio: %lu\n\r",got_time,__millis()-got_time);
 	    return true;
 	}
     	    
-         __msleep(10);
+         usleep(10);
     	if (__millis() - se_empieza > 5000 )
       	timeout = true;
 
     }
-    /*if( timeout ){
+    if( timeout ){
         //Si se espero mucho, la transmision fallo
         printf("Error, El tiempo ya paso.\n\r");
         radio.printDetails();
         return false;
-    }else{
+    }
+	return true;
+	/*else{
         //Si se recibio un mensaje a tiempo, se lee
         unsigned long got_time;
         radio.read( &got_time, sizeof(unsigned long) );
@@ -111,6 +117,7 @@ int main (int argc, char ** argv){
     while((opcion = getopt(argc,argv,"f:"))!=-1){
         if(opcion=='f'){
             printf("\nEnviando comando!\n");
+	    printf("\n%s\n",optarg);
             enviarMensaje(optarg);
         }else{
             //imprimiendo ayuda
