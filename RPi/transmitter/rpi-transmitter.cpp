@@ -11,7 +11,7 @@
 #include <string>
 #include <cstdlib>
 
-#include "../RF24.h"
+#include "librf24/RF24.h"
 //define RF_SETUP 0X17
 //define IF_SERIAL_DEBUG 
 using namespace std;
