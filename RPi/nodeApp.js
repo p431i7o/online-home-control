@@ -39,7 +39,7 @@ app.use(function(req, res, next){
 			//console.log(req.body);
 			var mensajeBin = req.body.mensajeBin;
 			var mensajeHex = req.body.mensajeHex;
-			exec('dir '+mensajeHex,function(error,stdout,stderr){
+			exec('./transmitter/rpi-transmitter -f '+mensajeHex,function(error,stdout,stderr){
 				console.log('stdout: ' + stdout);
 				console.log('stderr: ' + stderr);
 				if (error !== null) {

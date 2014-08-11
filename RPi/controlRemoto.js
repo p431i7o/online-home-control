@@ -44,7 +44,7 @@ function encender(){
         console.log('@@apagar@@',mensaje,parseInt(mensaje,2).toString(16));
 		mensajeBin=mensaje;
 		mensajeHex=parseInt(mensaje,2).toString(16);
-		//procesarComando();
+		procesarComando();
         console.log('@@apagar');
     }else{
         var indicador = '0000';

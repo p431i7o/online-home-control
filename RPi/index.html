@@ -7,7 +7,7 @@
     function procesarComando(){
     $.ajax({type: "POST",
             url: "procesarComando",
-            data: { mensajeBin: mensajeBin, mensajeHex: mensajeHex }
+            data: { mensajeBin: mensajeBin, mensajeHex: '0x'+mensajeHex }
     }).done(function( msg ) {
         console.log('hecho',msg);
     });
