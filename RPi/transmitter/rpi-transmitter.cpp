@@ -12,19 +12,7 @@
 #include <cstdlib>
 
 #include "librf24/RF24.h"
-//define RF_SETUP 0X17
-//define IF_SERIAL_DEBUG 
 using namespace std;
-// Radio pipe addresses for the 2 nodes to communicate.
-// First pipe is for writing, 2nd, 3rd, 4th, 5th & 6th is for reading...
-// Pipe0 in bytes is "serv1" for mirf compatibility
-/*const uint64_t pipes[6] = { 0x7365727631LL, 
-                            0xF0F0F0F0E1LL, 
-                            0xF0F0F0F0E2LL, 
-                            0xF0F0F0F0E3LL, 
-                            0xF0F0F0F0E4, 
-                            0xF0F0F0F0E5 };
-*/
 const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, //para escribir
                             0x7365727631LL // Para leer
 };
@@ -34,14 +22,14 @@ RF24 radio("/dev/spidev0.0",8000000,25);  // Setup for GPIO 25 CSN
 
 void setup(void){
     printf("\nSetup - Preparando interface\n");
-    radio.begin();//
-    radio.enableDynamicPayloads();//
+    radio.begin();
+    radio.enableDynamicPayloads();
     radio.setAutoAck(1);
-    radio.setRetries(15,15);//
+    radio.setRetries(15,15);
     
-    radio.setDataRate(RF24_1MBPS);//
-    radio.setPALevel(RF24_PA_MAX);//
-    radio.setChannel(76);//
+    radio.setDataRate(RF24_1MBPS);
+    radio.setPALevel(RF24_PA_MAX);
+    radio.setChannel(76);
     radio.setCRCLength(RF24_CRC_16);  
 
     radio.openWritingPipe(pipes[0]);
@@ -54,13 +42,10 @@ void setup(void){
 }
 
 bool enviarMensaje(char* mensaje){
-    radio.stopListening();
-    printf("Mensaje recibido: %s\n",mensaje);
-    /* int i=0;
-    for(;mensaje[i]!='\0';){
-       i++;       
-    }*/
+   radio.stopListening();
+   printf("Mensaje recibido: %s\n",mensaje);
    printf("Tamanyo enviado %i\n\r",strlen(mensaje));
+   
    bool ok = radio.write(mensaje,strlen(mensaje));
     if(ok){
         printf("Ok . . . \n\r");        
@@ -91,24 +76,16 @@ bool enviarMensaje(char* mensaje){
       	timeout = true;
 
     }
+    
     if( timeout ){
         //Si se espero mucho, la transmision fallo
         printf("Error, El tiempo ya paso.\n\r");
         radio.printDetails();
         return false;
     }
-	return true;
-	/*else{
-        //Si se recibio un mensaje a tiempo, se lee
-        unsigned long got_time;
-        radio.read( &got_time, sizeof(unsigned long) );
-        printf("Se recibio respuesta %lu, retraso envio: %lu\n\r",got_time,__millis()-got_time);
-        return true;        
-    }
-    */
-
-    
+	return true;    
 }
+
 int main (int argc, char ** argv){
     char opcion;
     setup();
