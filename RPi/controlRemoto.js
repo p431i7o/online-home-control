@@ -28,7 +28,7 @@ function encender(){
     var cuarteto2 = '0000';    
 
     if(v_indicador == 'apagado'  ){
-        v_indicador = 'normal';
+        v_indicador = 'encendido';
     }else{
         v_indicador = 'apagado';
     }
@@ -44,9 +44,15 @@ function encender(){
         console.log('@@apagar@@',mensaje,parseInt(mensaje,2).toString(16));
 		mensajeBin=mensaje;
 		mensajeHex=parseInt(mensaje,2).toString(16);
-		procesarComando();
+		//procesarComando();
+        console.log('@@apagar');
     }else{
         var indicador = '0000';
+        
+        //var bitsum = padString(((parseInt(indicador,2)+parseInt(cuarteto1,2)+parseInt(cuarteto2,2)+parseInt(cuarteto3,2))%16).toString(2),0,4,'left');
+       // var mensaje = header+indicador+cuarteto1+cuarteto2+cuarteto3+bitsum;
+        
+      //  console.log('prueba=>mensaje',mensaje,'mensajeHex=>',parseInt(mensaje,2).toString(16));
         normal();  
     }
 
@@ -192,7 +198,14 @@ function normal(){
     var header = str2bin(cabecera());
     var indicador= padString('0','0',4,'left');
     var modo=padString('0','0',4,'left');
-    if(v_modo=='frio'){
+    if(v_indicador=='encendido'){
+        if(v_modo=='frio'||v_modo=='deshumidicar'){
+            modo ='0000';
+        }else if(v_modo=='calor'){
+            modo='0100';
+        }
+        v_indicador=='normal';
+    }else if(v_modo=='frio'){
         modo = '1000';
     }else if(v_modo=='calor'){
         modo = '1100';
