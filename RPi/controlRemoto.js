@@ -44,7 +44,7 @@ function encender(){
         console.log('@@apagar@@',mensaje,parseInt(mensaje,2).toString(16));
 		mensajeBin=mensaje;
 		mensajeHex=parseInt(mensaje,2).toString(16);
-		//procesarComando();
+		procesarComando();
         console.log('@@apagar');
     }else{
         var indicador = '0000';
@@ -125,6 +125,7 @@ function swing(){
     //console.log(mensaje,parseInt(mensaje,2).toString(16));
 	mensajeBin=mensaje;
 	mensajeHex=parseInt(mensaje,2).toString(16);
+    procesarComando();
 }
 
 function actualizar(){
@@ -141,7 +142,7 @@ function actualizar(){
     gebi('temporizador').innerHTML ='<strong>Temporizador</strong> '+v_temporizador;
 }
 
-function temporizador(){
+function temporizador(minutos){
     if(v_temporizador=='apagado'){
         v_temporizador = 1;
     }else if(v_temporizador < 7){
@@ -155,7 +156,11 @@ function temporizador(){
     if(v_temporizador=='apagado'){
         var tiempo = padString(0,'0',12,'left');
     }else{
-        var tiempo = padString((60*v_temporizador).toString(2),'0',12,'left');
+        if(typeof minutos != 'undefined'){
+            var tiempo = padString(minutos.toString(2),'0',12,'left');
+        }else{
+            var tiempo = padString((60*v_temporizador).toString(2),'0',12,'left');
+        }
     }
     
     console.log('tiempo',tiempo);
@@ -168,6 +173,7 @@ function temporizador(){
     console.log('@@temporizador@@');
 	mensajeBin=mensaje;
 	mensajeHex=parseInt(mensaje,2).toString(16);
+    procesarComando();
     //console.log(mensaje,parseInt(mensaje,2).toString(16),v_temporizador);
 }
 
