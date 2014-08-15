@@ -28,6 +28,12 @@ class Security_m extends CI_Model{
 	}
 
 	public function logged($user_id=null){
+		$user = $this->session->userdata('user');
+		
+		if($user_id==null && !empty($user) ){
+		  $user_id = $user->user_id;
+		}
+		
 		$this->db->where('user_id',$user_id);
 		$this->db->where('entered >',time()-86400);
 

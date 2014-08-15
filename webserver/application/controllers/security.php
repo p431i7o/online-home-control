@@ -7,10 +7,13 @@ class Security extends CI_Controller {
 		$this->load->model('security_m','securitym');
 	}
 	public function login(){
+	  if($this->securitym->logged()){
+	    redirect('/');
+	  }
 		$user = $this->input->post('user',true);
 		$password = $this->input->post('password',true);
 		if($this->securitym->login($user,$password)){
-			$this->load->view('home');
+			redirect('/');
 		}else{
 			$this->load->view('start');
 		}
